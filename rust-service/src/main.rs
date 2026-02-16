@@ -18,6 +18,9 @@ lazy_static! {
     ).unwrap();
 
     static ref HTTP_CLIENT: reqwest::Client = reqwest::Client::new();
+
+    static ref BACKEND_URL: String = std::env::var("BACKEND_URL")
+        .unwrap_or_else(|_| "http://localhost:8080/".to_string());
 }
 
 #[tokio::main]
@@ -54,8 +57,7 @@ async fn handle_request() -> impl IntoResponse {
     }
 
     // Step 3: Call downstream backend
-    let backend_url = env::var("BACKEND_URL").unwrap_or_else(|_| "http://localhost:8080/".to_string());
-    let _response = HTTP_CLIENT.get(&backend_url).send().await;
+    let _response = HTTP_CLIENT.get(BACKEND_URL.as_str()).send().await;
 
     // Record latency
     let duration = start.elapsed().as_secs_f64();
