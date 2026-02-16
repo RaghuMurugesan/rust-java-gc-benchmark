@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 2s
+  evaluation_interval: 2s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  - job_name: 'java-g1gc'
+    static_configs:
+      - targets: ['java-g1gc:8080']
+
+  - job_name: 'java-zgc'
+    static_configs:
+      - targets: ['java-zgc:8080']
+
+  - job_name: 'rust'
+    static_configs:
+      - targets: ['rust:8080']
