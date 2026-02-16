@@ -16,6 +16,8 @@ lazy_static! {
         ).buckets(vec![0.080, 0.085, 0.090, 0.095, 0.100, 0.110, 0.120, 0.150, 0.200, 0.300, 0.500, 1.0]),
         &[]
     ).unwrap();
+
+    static ref HTTP_CLIENT: reqwest::Client = reqwest::Client::new();
 }
 
 #[tokio::main]
@@ -53,8 +55,7 @@ async fn handle_request() -> impl IntoResponse {
 
     // Step 3: Call downstream backend
     let backend_url = env::var("BACKEND_URL").unwrap_or_else(|_| "http://localhost:8080/".to_string());
-    let client = reqwest::Client::new();
-    let _response = client.get(&backend_url).send().await;
+    let _response = HTTP_CLIENT.get(&backend_url).send().await;
 
     // Record latency
     let duration = start.elapsed().as_secs_f64();
