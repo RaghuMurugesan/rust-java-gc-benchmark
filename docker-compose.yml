@@ -44,6 +44,22 @@ services:
           cpus: "1.0"
           memory: 1G
 
+  rust:
+    build: ./rust-service
+    container_name: rust
+    ports:
+      - "8083:8080"
+    environment:
+      - BACKEND_URL=http://mock-backend:8080/
+      - PORT=8080
+    depends_on:
+      - mock-backend
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.49.1
     container_name: cadvisor
