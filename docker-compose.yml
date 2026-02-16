@@ -27,6 +27,23 @@ services:
           cpus: "1.0"
           memory: 1G
 
+  java-zgc:
+    build: ./java-service
+    container_name: java-zgc
+    ports:
+      - "8082:8080"
+    environment:
+      - BACKEND_URL=http://mock-backend:8080/
+      - PORT=8080
+    command: ["-XX:+UseZGC", "-Xmx512m", "-Xms512m", "-Xlog:gc*:stdout:time,level,tags", "Service"]
+    depends_on:
+      - mock-backend
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.49.1
     container_name: cadvisor
