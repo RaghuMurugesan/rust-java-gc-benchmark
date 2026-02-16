@@ -1,0 +1,32 @@
+services:
+  mock-backend:
+    build: ./mock-backend
+    container_name: mock-backend
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 256M
+
+  java-g1gc:
+    build: ./java-service
+    container_name: java-g1gc
+    ports:
+      - "8081:8080"
+    environment:
+      - BACKEND_URL=http://mock-backend:8080/
+      - PORT=8080
+    command: ["-XX:+UseG1GC", "-Xmx512m", "-Xms512m", "-Xlog:gc*:stdout:time,level,tags", "Service"]
+    depends_on:
+      - mock-backend
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+
+networks:
+  default:
+    name: gc-demo-network
