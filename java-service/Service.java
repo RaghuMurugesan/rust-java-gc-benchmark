@@ -100,6 +100,7 @@ public class Service {
         for (int i = 0; i < BUCKETS.length; i++) {
             if (seconds <= BUCKETS[i]) {
                 bucketCounts.incrementAndGet(i);
+                break;
             }
         }
     }
